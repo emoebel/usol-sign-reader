@@ -24,7 +24,10 @@ for fname in fname_list:
     try:
         img = io.open_img_as_np_array(path_images + fname + '.jpg')
     except FileNotFoundError:
-        img = io.open_img_as_np_array(path_images + fname + '.jpeg')
+        try:
+            img = io.open_img_as_np_array(path_images + fname + '.jpeg')
+        except FileNotFoundError:
+            img = io.open_img_as_np_array(path_images + fname + '.png')
     img_shape = img.shape[:2]
 
     # Get segmentation map from Shapes object:

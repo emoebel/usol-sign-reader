@@ -16,6 +16,20 @@ def get_fname_list_from_dir(dir_path, ext='csv'):
     return fname_list
 
 
+def save_fname_list_to_txt(my_list, filename):
+    with open(filename, 'w') as file:
+        for item in my_list:
+            file.write(f"{item}\n")
+
+
+def open_fname_list_from_txt(filename):
+    with open(filename, 'r') as file:
+        fname_list = []
+        for line in file:
+            fname_list.append(line[:-1])
+    return fname_list
+
+
 def get_data_for_shapes_layer_from_polygon_csv(fname_csv):
     """
     :param fname_csv: (str) file name of csv file, as created by saving Napari shapes layer
