@@ -3,6 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import os
 import shutil
+from PIL import Image
 
 path_images = '/Users/manu/boulot/unit_solutions/data/images/all/'
 path_segmaps = '/Users/manu/boulot/unit_solutions/data/annotations/segmentation/segmentation_maps/'
@@ -40,7 +41,7 @@ def create_dset(destination_folder, fname_list):
     for fname in fname_list:
         print(destination_folder + fname)
 
-        # Read image and copy to destination. Source files have different extensions, we want dest files to all be tiff
+        # Read image and copy to destination. Source files have different extensions, we want dest files to all be jpg
         fname_img_source = path_images + fname
         try:
             img = io.open_img_as_np_array(fname_img_source + '.jpg')
@@ -50,13 +51,21 @@ def create_dset(destination_folder, fname_list):
             except FileNotFoundError:
                 img = io.open_img_as_np_array(fname_img_source + '.png')
 
-        fname_img_dest = path_dset + destination_folder + fname + '.tiff'
+        fname_img_dest = path_dset + destination_folder + fname + '.jpg'
         plt.imsave(fname_img_dest, img)  # for visu
 
         # Read segmentation map and copy to destination:
+        # fname_segmap_source = path_segmaps + fname + '.npy'
+        # fname_segmap_dest = path_dset + destination_folder + fname + '_seg.npy'
+        # shutil.copyfile(fname_segmap_source, fname_segmap_dest)
         fname_segmap_source = path_segmaps + fname + '.npy'
-        fname_segmap_dest = path_dset + destination_folder + fname + '.npy'
-        shutil.copyfile(fname_segmap_source, fname_segmap_dest)
+        fname_segmap_dest = path_dset + destination_folder + fname + '_masks.png'
+
+        seg_map = np.load(fname_segmap_source)
+        # seg_map_pil = Image.fromarray(seg_map)
+        # seg_map_pil.save(fname_segmap_dest)
+        io.save_np_array_as_img(fname_segmap_dest, seg_map)
+
 
 
 create_dset(

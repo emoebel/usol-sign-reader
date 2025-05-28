@@ -51,3 +51,7 @@ def get_data_for_shapes_layer_from_polygon_csv(fname_csv):
 
 def open_img_as_np_array(fname):
     return np.asarray(Image.open(fname))
+
+def save_np_array_as_img(fname, array):
+    pil_img = Image.fromarray(array)
+    pil_img.save(fname)
