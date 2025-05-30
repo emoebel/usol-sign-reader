@@ -1,4 +1,5 @@
 import utils.io as io
+import utils.transform as tf
 import numpy as np
 import matplotlib.pyplot as plt
 import os
@@ -43,28 +44,30 @@ def create_dset(destination_folder, fname_list):
 
         # Read image and copy to destination. Source files have different extensions, we want dest files to all be jpg
         fname_img_source = path_images + fname
+        fname_img_dest = path_dset + destination_folder + fname + '.jpg'
+
         try:
             img = io.open_img_as_np_array(fname_img_source + '.jpg')
         except FileNotFoundError:
             try:
                 img = io.open_img_as_np_array(fname_img_source + '.jpeg')
             except FileNotFoundError:
-                img = io.open_img_as_np_array(fname_img_source + '.png')
-
-        fname_img_dest = path_dset + destination_folder + fname + '.jpg'
-        plt.imsave(fname_img_dest, img)  # for visu
+                #img = io.open_img_as_np_array(fname_img_source + '.png')
+                rgba_image = Image.open(fname_img_source + '.png')
+                rgb_image = rgba_image.convert('RGB')
+                img = np.asarray(rgb_image)
 
         # Read segmentation map and copy to destination:
-        # fname_segmap_source = path_segmaps + fname + '.npy'
-        # fname_segmap_dest = path_dset + destination_folder + fname + '_seg.npy'
-        # shutil.copyfile(fname_segmap_source, fname_segmap_dest)
         fname_segmap_source = path_segmaps + fname + '.npy'
         fname_segmap_dest = path_dset + destination_folder + fname + '_masks.png'
 
         seg_map = np.load(fname_segmap_source)
-        # seg_map_pil = Image.fromarray(seg_map)
-        # seg_map_pil.save(fname_segmap_dest)
-        io.save_np_array_as_img(fname_segmap_dest, seg_map)
+
+        # Apply size normalisation and save:
+        img_new, seg_map_new = tf.normalize_image_size(img, seg_map, min_size=512)
+
+        io.save_np_array_as_img(fname_img_dest, img_new)
+        io.save_np_array_as_img(fname_segmap_dest, seg_map_new)
 
 
 
