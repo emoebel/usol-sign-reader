@@ -52,6 +52,22 @@ def get_data_for_shapes_layer_from_polygon_csv(fname_csv):
 def open_img_as_np_array(fname):
     return np.asarray(Image.open(fname))
 
+
 def save_np_array_as_img(fname, array):
     pil_img = Image.fromarray(array)
     pil_img.save(fname)
+
+
+def get_fnames_from_lstudio_json(path_annot_file):
+    df = pd.read_json(path_annot_file)
+
+    fname_list = []
+    for row in df.itertuples():
+        fname_lstudio = row.file_upload
+
+        # lstudio adds an id in front of original fnale
+        # we want 'b9c1c77f-OW-031931-01_4.jpeg' -> 'OW-031931-01_4.jpeg'
+        fname = '-'.join(fname_lstudio.split('-')[1:])
+        fname_list.append(fname)
+
+    return fname_list
