@@ -68,6 +68,7 @@ def get_fnames_from_lstudio_json(path_annot_file):
         # lstudio adds an id in front of original fnale
         # we want 'b9c1c77f-OW-031931-01_4.jpeg' -> 'OW-031931-01_4.jpeg'
         fname = '-'.join(fname_lstudio.split('-')[1:])
+        fname = os.path.splitext(fname)[0]  # 'OW-031931-01_4.jpeg' -> 'OW-031931-01_4'
         fname_list.append(fname)
 
     return fname_list
