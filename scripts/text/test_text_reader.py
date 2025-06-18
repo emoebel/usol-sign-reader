@@ -25,8 +25,8 @@ class TextReader:
         return scontent
 
 # Load your image
-#img = Image.open(''/Users/manu/boulot/unit_solutions/diapos/arbeitsplan/images/isolate_3.png'')
-img = Image.open('/Users/manu/boulot/unit_solutions/diapos/arbeitsplan/images/isolate_2.png')
+img = Image.open('/Users/manu/boulot/unit_solutions/diapos/arbeitsplan/images/isolate_3.png')
+#img = Image.open('/Users/manu/boulot/unit_solutions/diapos/arbeitsplan/images/isolate_2.png')
 
 treader = TextReader()
 scontent = treader(img)
