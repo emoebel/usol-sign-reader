@@ -10,9 +10,14 @@ class TextReader:
         :return: (list of dict) each list line corresponds to a line in the sign
         '''
         answer = self.model.query(img, "Give me the name of the destinations and their durations")['answer']
+        # test: Transcribe the destinations and corresponding durations in natural reading order.
 
-        # Here we make the assumption that the answer looks like: ' Brüschrainhöchi: 30 min\nChili Tändli: 1 h 30 min\nEinsiedeln: 4 h'
-        text_lines = answer.split('\n')
+        # Here we make the assumption that the answer looks like: 'Brüschrainhöchi: 30 min\nChili Tändli: 1 h 30 min\nEinsiedeln: 4 h'
+        answer_splitter = '\n'
+        if answer.find(answer_splitter) == -1:
+            answer_splitter = ',' # sometimes  answer looks like: 'Brüschrainhöchi: 30 min, Chili Tändli: 1 h 30 min, Einsiedeln: 4 h'
+
+        text_lines = answer.split(answer_splitter)
         scontent = []  # sign content
         for line in text_lines:
             destination, duration = line.split(':')
