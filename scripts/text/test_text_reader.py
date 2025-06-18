@@ -1,5 +1,6 @@
 import moondream as md
 from PIL import Image
+import utils.io as io
 
 class TextReader:
     def __init__(self):
@@ -8,7 +9,7 @@ class TextReader:
     def __call__(self, img):
         '''
 
-        :param img: (numpy array)
+        :param img: (pil img)
         :return: (list of dict) each list line corresponds to a line in the sign
         '''
         answer = self.model.query(img, "Give me the name of the destinations and their durations")['answer']
@@ -26,6 +27,7 @@ class TextReader:
 
 # Load your image
 img = Image.open('/Users/manu/boulot/unit_solutions/diapos/arbeitsplan/images/isolate_3.png')
+#img = io.open_img_as_np_array('/Users/manu/boulot/unit_solutions/diapos/arbeitsplan/images/isolate_3.png')
 #img = Image.open('/Users/manu/boulot/unit_solutions/diapos/arbeitsplan/images/isolate_2.png')
 
 treader = TextReader()
