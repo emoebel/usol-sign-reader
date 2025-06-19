@@ -20,8 +20,9 @@ class ImageReader:
         # Data:
         self.img_np = None
         self.masks = None
-        self.icontent = None
         self.boxes = None
+        self.class_names = None
+        self.icontent = None
 
     def __call__(self, img_pil):
         '''
@@ -47,10 +48,17 @@ class ImageReader:
         masks = self.signdetector(img_np)
         idx_instance_list = np.unique(masks)[1:] # this gives the instance idx of each sign
 
+        # Next, detect objects:
+        if self.print: print('[IR] Running symbol detector...')
+        boxes, class_names = self.symbdetector(img_np)
+
         icontent = [] # instanciate image content object
         for idx_instance in idx_instance_list: # for each sign
             if self.print: print(f'[IR] Analyzing sign {idx_instance}...')
             mask_sign = masks == idx_instance # get mask specific to current sign
+
+            # Use the mask to get keep only boxes that are part of mask
+            box_list_in_mask = analysis.which_boxes_are_in_mask(boxes, mask_sign)
 
             # Multiply image by mask, and get and image focused on current sign. Everything else is blacked out
             img_np_focus = np.zeros(img_np.shape, dtype=np.uint8)
@@ -63,14 +71,11 @@ class ImageReader:
             if self.print: print('[IR] Running text reader...')
             scontent = self.textreader(img_pil_focus)
 
-            # Now, detect objects:
-            if self.print: print('[IR] Running symbol detector...')
-            boxes, class_names = self.symbdetector(img_np_focus) # TODO: in future version, detect on whole image so only called once
 
             # Now that we have detected everything that we need, we have to put these detections in relation
             # What symbol is part of which text line?
             if self.print: print('[IR] Putting all sign information together...')
-            idx_closest_line_per_box = analysis.get_lines_for_boxes(boxes=boxes, scontent=scontent)
+            idx_closest_line_per_box = analysis.get_lines_for_boxes(boxes=box_list_in_mask, scontent=scontent)
 
             for idx_line, lcontent in enumerate(scontent):  # for each line in sign
                 idx_boxes = np.nonzero(np.array(idx_closest_line_per_box) == idx_line)[0]  # [0] because outputs a tupple
@@ -79,26 +84,31 @@ class ImageReader:
                 if len(idx_boxes) > 0:  # if for current line corresponding boxes have been found
                     class_lbl_list = []
                     for idx_box in idx_boxes:
-                        box = boxes[idx_box]
+                        box = box_list_in_mask[idx_box]
                         class_lbl_list.append(int(box.cls[0]))
 
                 lcontent['symbols'] = class_lbl_list
                 scontent[idx_line] = lcontent
 
-        icontent.append(scontent)
-        self.set_data(img_np, masks, icontent)
+            icontent.append(scontent)
+
+        self.set_data(img_np, masks, boxes, class_names, icontent)
 
         return icontent
 
     def initialize_data(self):
         self.img_np = None
         self.masks = None
+        self.boxes = None
+        self.class_names = None
         self.icontent = None
 
-    def set_data(self, img_np, masks, icontent):
+    def set_data(self, img_np, masks, boxes, class_names, icontent):
         self.img_np = img_np
         self.masks = masks
+        self.boxes = boxes
+        self.class_names = class_names
         self.icontent = icontent
 
     def get_data(self):
-        return self.img_np, self.masks, self.icontent
+        return self.img_np, self.masks, self.boxes, self.class_names, self.icontent

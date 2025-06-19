@@ -2,6 +2,7 @@ import os.path
 import pandas as pd
 from PIL import Image
 import numpy as np
+import pprint
 
 def get_fname_list_from_dir(dir_path, ext='csv'):
     # Get all files in directory:
@@ -72,3 +73,13 @@ def get_fnames_from_lstudio_json(path_annot_file):
         fname_list.append(fname)
 
     return fname_list
+
+
+def save_image_content_as_txt(icontent, fname):
+    '''
+    Allows to save ImageReader output as txt file
+    '''
+    with open(fname, 'w', encoding='utf-8') as f:
+        for scontent in icontent:
+            pprint.pprint(scontent, stream=f, sort_dicts=True)
+            print('\n', file=f)
