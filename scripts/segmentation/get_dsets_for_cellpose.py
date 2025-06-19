@@ -1,9 +1,7 @@
-import utils.io as io
-import utils.transform as tf
+import signreader.utils.io as io
+import signreader.utils.transform as tf
 import numpy as np
-import matplotlib.pyplot as plt
 import os
-import shutil
 from PIL import Image
 
 path_images = '/Users/manu/boulot/unit_solutions/data/images/all/'

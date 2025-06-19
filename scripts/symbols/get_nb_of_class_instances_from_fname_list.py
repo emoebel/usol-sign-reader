@@ -1,17 +1,17 @@
 # This scripts helps to constitute the test set. We want this set to contain (i) beautiful examples for presentations
 # (for example clean images with lots of different symbols) and (ii) around 20 instances per class.
 
-import utils.io as io
+import signreader.utils.io as io
 import pandas as pd
 import os
 
 fname_list = io.open_fname_list_from_txt('/Users/manu/boulot/unit_solutions/data/datasets/bbox/fname_list_beautiful_examples.txt') + \
-    io.open_fname_list_from_txt('/Users/manu/boulot/unit_solutions/data/datasets/bbox/fname_list_testset_strassenbahn.txt') + \
-    io.open_fname_list_from_txt('/Users/manu/boulot/unit_solutions/data/datasets/bbox/fname_list_testset_sessellift.txt') + \
-    io.open_fname_list_from_txt('/Users/manu/boulot/unit_solutions/data/datasets/bbox/fname_list_testset_schiffstation.txt') + \
-    io.open_fname_list_from_txt('/Users/manu/boulot/unit_solutions/data/datasets/bbox/fname_list_testset_feuerstelle.txt') + \
-    io.open_fname_list_from_txt('/Users/manu/boulot/unit_solutions/data/datasets/bbox/fname_list_testset_zahnrad.txt') + \
-    io.open_fname_list_from_txt('/Users/manu/boulot/unit_solutions/data/datasets/bbox/fname_list_testset_gondelbahn.txt')
+             io.open_fname_list_from_txt('/Users/manu/boulot/unit_solutions/data/datasets/bbox/fname_list_testset_strassenbahn.txt') + \
+             io.open_fname_list_from_txt('/Users/manu/boulot/unit_solutions/data/datasets/bbox/fname_list_testset_sessellift.txt') + \
+             io.open_fname_list_from_txt('/Users/manu/boulot/unit_solutions/data/datasets/bbox/fname_list_testset_schiffstation.txt') + \
+             io.open_fname_list_from_txt('/Users/manu/boulot/unit_solutions/data/datasets/bbox/fname_list_testset_feuerstelle.txt') + \
+             io.open_fname_list_from_txt('/Users/manu/boulot/unit_solutions/data/datasets/bbox/fname_list_testset_zahnrad.txt') + \
+             io.open_fname_list_from_txt('/Users/manu/boulot/unit_solutions/data/datasets/bbox/fname_list_testset_gondelbahn.txt')
 
 # -> this is now our test set
 io.save_fname_list_to_txt(fname_list, '/Users/manu/boulot/unit_solutions/data/datasets/bbox/fname_list_testset.txt')

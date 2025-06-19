@@ -1,5 +1,4 @@
-import pandas as pd
-import utils.io as io
+import signreader.utils.io as io
 
 path_annot_file = '/Users/manu/Downloads/project-3-at-2025-06-10-10-31-644aa820.json'
 

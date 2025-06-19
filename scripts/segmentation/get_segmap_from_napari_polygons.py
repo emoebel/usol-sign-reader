@@ -1,4 +1,4 @@
-import utils.io as io
+import signreader.utils.io as io
 import napari.layers
 import numpy as np
 

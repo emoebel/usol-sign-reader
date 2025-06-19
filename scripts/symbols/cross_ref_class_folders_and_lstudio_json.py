@@ -1,8 +1,7 @@
 # Here I want to get a fname_list of files that are both (i) been annotated (i.e. present in annot json file) and
 # (ii) present in class folder (as existing in original data set). This will help me to select a test set.
 
-import utils.io as io
-import random
+import signreader.utils.io as io
 import numpy as np
 
 
@@ -26,8 +25,8 @@ path_output = '/Users/manu/boulot/unit_solutions/data/datasets/bbox/fname_list_t
 n = 5  # nb of images randomly selected for test set
 
 fname_list_class = io.get_fname_list_from_dir(path_class_folder, 'jpg') + \
-    io.get_fname_list_from_dir(path_class_folder, 'jpeg') + \
-    io.get_fname_list_from_dir(path_class_folder, 'png')
+                   io.get_fname_list_from_dir(path_class_folder, 'jpeg') + \
+                   io.get_fname_list_from_dir(path_class_folder, 'png')
 
 path_annot_file = '/Users/manu/Downloads/project-3-at-2025-06-12-09-00-c3c15364.json'
 

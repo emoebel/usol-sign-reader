@@ -1,6 +1,6 @@
-from cellpose import models, plot
+from cellpose import models
 import matplotlib.pyplot as plt
-import utils.io as io
+import signreader.utils.io as io
 import time
 
 class SignDetector:

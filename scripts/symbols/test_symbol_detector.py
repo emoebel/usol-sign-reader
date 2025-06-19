@@ -1,5 +1,5 @@
 from ultralytics import YOLO
-import utils.io as io
+import signreader.utils.io as io
 import time
 
 class SymbolDetector:

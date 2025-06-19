@@ -2,7 +2,7 @@
 # so I have to select fewer images in a smart manner. I want to select images of rare classes, but only if they have
 # not been already annotated.
 
-import utils.io as io
+import signreader.utils.io as io
 
 path_annot_file = '/Users/manu/Downloads/project-3-at-2025-06-11-08-28-c2403035.json'
 
@@ -23,8 +23,8 @@ fname_list_annotated = io.get_fnames_from_lstudio_json(path_annot_file)
 # path_class = '/Users/manu/boulot/unit_solutions/data/images/9_Sessellift/'
 path_class = '/Users/manu/boulot/unit_solutions/data/images/30_Aussichtspunkt/'
 fname_list_class = io.get_fname_list_from_dir(path_class, 'jpg') + \
-    io.get_fname_list_from_dir(path_class, 'jpeg') + \
-    io.get_fname_list_from_dir(path_class, 'png')
+                   io.get_fname_list_from_dir(path_class, 'jpeg') + \
+                   io.get_fname_list_from_dir(path_class, 'png')
 
 fname_list_new = list(set(fname_list_class) - set(fname_list_annotated))
 

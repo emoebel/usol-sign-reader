@@ -1,6 +1,6 @@
 # This script is to get average image size in dataset, to determine which subsampling is to be used for cellpose.
 
-import utils.io as io
+import signreader.utils.io as io
 import numpy as np
 import matplotlib.pyplot as plt
 

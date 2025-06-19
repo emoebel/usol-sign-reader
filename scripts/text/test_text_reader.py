@@ -1,6 +1,6 @@
 import moondream as md
 from PIL import Image
-import utils.io as io
+
 
 class TextReader:
     def __init__(self):

@@ -1,5 +1,5 @@
 import os
-import utils.io as io
+import signreader.utils.io as io
 import shutil
 
 def get_fname_list_with_ext_from_dir(dir_path, ext='csv'):
