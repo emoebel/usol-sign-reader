@@ -8,7 +8,7 @@ class SymbolDetector:
         '''
 
         :param img: (numpy array) of shape (Height, Width, Channel=3), and with dtype=uint8
-        :return: (ultralytics.engine.results.Boxes) detected boxes and associated classes
+        :return: (ultralytics.engine.results.Boxes) detected boxes and associated classes. Also outputs a (dict) mapping class indices to class names.
         '''
         result = self.model(img)[0]
-        return result.boxes
+        return result.boxes, result.names

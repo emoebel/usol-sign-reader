@@ -1,4 +1,5 @@
 import moondream as md
+import numpy as np
 
 class TextReader:
     def __init__(self):
@@ -24,5 +25,39 @@ class TextReader:
             scontent.append(
                 {'destination': destination, 'duration': duration}
             )
+
+        scontent = self.get_text_lines(img, scontent)
+
+        return scontent
+
+    def get_text_lines(self, img, scontent):
+        '''
+        This method computes the coordinates of detected text. Allows to infer text lines, each line defined by (pos_dest, pos_dura)
+        :param img: (pil img)
+        :param scontent: (list of dict) input sign content
+        :return: (list of dict) output sign content, with added line coordinates
+        '''
+        img_np = np.asarray(img)
+        for idx_line, content in enumerate(scontent):
+
+            lcontent = scontent[idx_line]  # line content
+
+            # Find destination position:
+            objects = self.model.detect(img, lcontent['destination'])['objects']
+            if len(objects) > 1:
+                print(f"Line {idx_line}: found {len(objects)} destination instance(s)")
+            x = (objects[0]['x_min'] + objects[0]['x_max']) / 2 * img_np.shape[1]
+            y = (objects[0]['y_min'] + objects[0]['y_max']) / 2 * img_np.shape[0]
+            content['pos_dest'] = (x, y)
+
+            # Find duration position:
+            objects = self.model.detect(img, lcontent['duration'])['objects']
+            if len(objects) > 1:
+                print(f"Line {idx_line}: found {len(objects)} duration instance(s)")
+            x = (objects[0]['x_min'] + objects[0]['x_max']) / 2 * img_np.shape[1]
+            y = (objects[0]['y_min'] + objects[0]['y_max']) / 2 * img_np.shape[0]
+            content['pos_dura'] = (x, y)
+
+            scontent[idx_line] = content  # add position info in sign content
 
         return scontent
