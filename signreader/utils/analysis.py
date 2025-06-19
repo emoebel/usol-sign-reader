@@ -33,3 +33,21 @@ def get_lines_for_boxes(boxes, scontent):
         idx_closest_line = int(np.argmin(dist_list))
         idx_closest_line_per_box.append(idx_closest_line)
     return idx_closest_line_per_box
+
+
+def which_boxes_are_in_mask(boxes, mask):
+    '''
+    Returns a list of box whose center coordinates are inside the mask.
+    :param boxes: (ultralytics.engine.results.Boxes) detected boxes and associated classes
+    :param mask: (numpy array) binary mask
+    :return: list of box
+    '''
+    box_list = []
+    for box in boxes:
+        x_box, y_box, _, _ = box.xywh[0]
+        x_box = int(np.round(x_box))
+        y_box = int(np.round(y_box))
+
+        if mask[y_box, x_box]==True:
+            box_list.append(box)
+    return box_list
