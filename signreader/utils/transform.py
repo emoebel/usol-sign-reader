@@ -47,3 +47,42 @@ def normalize_image_size(img, lmap, min_size=512):
     )
 
     return img_new, lmap_new
+
+
+def multiply_rgb_image_by_binary_mask(img_np, mask):
+    '''
+    :param img_np: (numpy array) of size [H, W, C]
+    :param mask: (numpy array) binary mask of size [H, W]
+    :return:
+    '''
+    img_np_focus = np.zeros(img_np.shape, dtype=np.uint8)
+    for channel in range(3):
+        img_np_focus[:, :, channel] = img_np[:, :, channel] * mask
+    return img_np_focus
+
+
+def get_scontent_without_none_coordinates(scontent):
+    '''
+    Sometimes TextReader makes errors and does not detect text lines correctly. In this case, text line coordinates
+    lcontent['pos_dest'] or lcontent['pos_dura'] can be (None, None), which produce errors later on when using
+    utils.transform.distance_btw_point_and_line. Therefor I make an approximation: the missing coordinate (pos_dest
+    or pos_dura) is replaced by the existing one (pos_dura or pos_dest), but shifted horizontally. I hope that there are
+    no cases where both coordinates are missing.
+    :param scontent:
+    :return:
+    '''
+    offset = 30 # in pixels
+    for idx, lcontent in enumerate(scontent):
+        if lcontent['pos_dest'] == (None, None) and lcontent['pos_dura'] == (None, None):
+            print(f'/!\ In line {idx}, both pos_dest and pos_dura are None')
+
+        if lcontent['pos_dest'] == (None, None):
+            [x, y] = lcontent['pos_dura']
+            lcontent['pos_dest'] = (x - offset, y)  # shifted left
+        if lcontent['pos_dura'] == (None, None):
+            [x, y] = lcontent['pos_dest']
+            lcontent['pos_dura'] = (x + offset, y)  # shifted right
+
+        scontent[idx] = lcontent
+
+    return scontent

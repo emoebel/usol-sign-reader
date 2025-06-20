@@ -4,16 +4,27 @@ from PIL import Image
 import numpy as np
 import pprint
 
-def get_fname_list_from_dir(dir_path, ext='csv'):
+def get_fname_list_from_dir(dir_path, ext='csv', with_extension=False):
     # Get all files in directory:
     dir_fnames = os.listdir(dir_path)
     fname_list = []
     for fname in dir_fnames:
         if fname[0] != '.' and os.path.splitext(fname)[1] == '.' + ext:
-            fname_without_extension = os.path.splitext(fname)[0]
-            fname_list.append(fname_without_extension)
+            if with_extension:
+                fname_out = fname
+            else:
+                fname_out = os.path.splitext(fname)[0] # fname_without_extension
+            fname_list.append(fname_out)
     fname_list.sort()
 
+    return fname_list
+
+
+def get_fname_list_from_dir_bis(dir_path, ext_list, with_extension=False):
+    fname_list = []
+    for ext in ext_list:
+        fname_list_ext = get_fname_list_from_dir(dir_path, ext=ext, with_extension=with_extension)
+        fname_list += fname_list_ext
     return fname_list
 
 

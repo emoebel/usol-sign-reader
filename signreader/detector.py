@@ -2,15 +2,15 @@ from signreader.engine.text import TextReader
 from signreader.engine.sign import SignDetector
 from signreader.engine.symbol import SymbolDetector
 import signreader.utils.analysis as analysis
+import signreader.utils.transform as transform
 
 import numpy as np
 from PIL import Image
 
 class ImageReader:
-    def __init__(self, print=False, plot=False):
+    def __init__(self, print=False):
         # Running params:
         self.print = print
-        self.plot = plot
 
         # Engines:
         self.textreader = TextReader()
@@ -44,37 +44,38 @@ class ImageReader:
         img_np = np.asarray(img_pil)
 
         # First, get instance masks
-        if self.print: print('[IR] Running sign detector...')
+        if self.print: print('[ImageRreader] Running sign detector...')
         masks = self.signdetector(img_np)
         idx_instance_list = np.unique(masks)[1:] # this gives the instance idx of each sign
 
         # Next, detect objects:
-        if self.print: print('[IR] Running symbol detector...')
+        if self.print: print('[ImageRreader] Running symbol detector...')
         boxes, class_names = self.symbdetector(img_np)
 
         icontent = [] # instanciate image content object
         for idx_instance in idx_instance_list: # for each sign
-            if self.print: print(f'[IR] Analyzing sign {idx_instance}...')
+            if self.print: print(f'[ImageRreader] Analyzing sign {idx_instance}...')
             mask_sign = masks == idx_instance # get mask specific to current sign
 
             # Use the mask to get keep only boxes that are part of mask
             box_list_in_mask = analysis.which_boxes_are_in_mask(boxes, mask_sign)
 
             # Multiply image by mask, and get and image focused on current sign. Everything else is blacked out
-            img_np_focus = np.zeros(img_np.shape, dtype=np.uint8)
-            for channel in range(3):
-                img_np_focus[:, :, channel] = img_np[:, :, channel] * mask_sign
-
+            #img_np_focus = np.zeros(img_np.shape, dtype=np.uint8)
+            #for channel in range(3):
+            #    img_np_focus[:, :, channel] = img_np[:, :, channel] * mask_sign
+            img_np_focus = transform.multiply_rgb_image_by_binary_mask(img_np, mask_sign)
             img_pil_focus = Image.fromarray(img_np_focus, 'RGB')
 
             # Read the text on sign:
-            if self.print: print('[IR] Running text reader...')
+            if self.print: print('[ImageRreader] Running text reader...')
             scontent = self.textreader(img_pil_focus)
-
 
             # Now that we have detected everything that we need, we have to put these detections in relation
             # What symbol is part of which text line?
-            if self.print: print('[IR] Putting all sign information together...')
+            # TODO: rest of this block could be self.put_detections_in_relation()
+            if self.print: print('[ImageRreader] Putting all sign information together...')
+            scontent = transform.get_scontent_without_none_coordinates(scontent) # see function description for explanation
             idx_closest_line_per_box = analysis.get_lines_for_boxes(boxes=box_list_in_mask, scontent=scontent)
 
             for idx_line, lcontent in enumerate(scontent):  # for each line in sign
