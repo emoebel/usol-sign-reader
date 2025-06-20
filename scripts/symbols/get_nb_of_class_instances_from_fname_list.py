@@ -14,7 +14,7 @@ fname_list = io.open_fname_list_from_txt('/Users/manu/boulot/unit_solutions/data
              io.open_fname_list_from_txt('/Users/manu/boulot/unit_solutions/data/datasets/bbox/fname_list_testset_gondelbahn.txt')
 
 # -> this is now our test set
-io.save_fname_list_to_txt(fname_list, '/Users/manu/boulot/unit_solutions/data/datasets/bbox/fname_list_testset.txt')
+#io.save_fname_list_to_txt(fname_list, '/Users/manu/boulot/unit_solutions/data/datasets/bbox/fname_list_testset.txt')
 
 
 path_annot_file = '/Users/manu/boulot/unit_solutions/data/annotations/bbox/lstudio/project-3-at-2025-06-16-12-29-cbcca54c.json'
