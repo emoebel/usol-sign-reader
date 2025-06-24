@@ -70,6 +70,20 @@ def save_np_array_as_img(fname, array):
     pil_img.save(fname)
 
 
+def open_img_as_np_array_without_fname_extension(fname):
+    ''' Useful when fname extensions are missing'''
+    try:
+        img_np = open_img_as_np_array(fname + '.jpg')
+    except FileNotFoundError:
+        try:
+            img_np = open_img_as_np_array(fname + '.jpeg')
+        except FileNotFoundError:
+            rgba_image = Image.open(fname + '.png')
+            rgb_image = rgba_image.convert('RGB')
+            img_np = np.asarray(rgb_image)
+    return img_np
+
+
 def get_fnames_from_lstudio_json(path_annot_file):
     df = pd.read_json(path_annot_file)
 

@@ -7,7 +7,8 @@ import pickle
 import matplotlib.pyplot as plt
 
 #path_output = '/Users/manu/boulot/unit_solutions/predictions/cellpose_test_set/'
-path_output = '/Users/manu/boulot/unit_solutions/predictions/image_reader/cellpose_test_set_beautiful_examples/'
+#path_output = '/Users/manu/boulot/unit_solutions/predictions/image_reader/cellpose_test_set_beautiful_examples/'
+path_output = '/Users/manu/boulot/unit_solutions/predictions/image_reader/yolo_test_set_beautiful_examples/'
 
 # path_img = '/Users/manu/boulot/unit_solutions/data/datasets/segmentation/cellpose/test/'
 # fname_list = [
@@ -33,21 +34,51 @@ path_output = '/Users/manu/boulot/unit_solutions/predictions/image_reader/cellpo
 #     'OW-032642-01_6.jpg',
 # ]
 
-path_img = '/Users/manu/boulot/unit_solutions/data/datasets/segmentation/cellpose/test/'
+# path_img = '/Users/manu/boulot/unit_solutions/data/datasets/segmentation/cellpose/test/'
+# fname_list = [
+#     #'BS-61727004_4_cropped.jpg',  # done
+#     #'BS-61826902_1_cropped_part2.jpg',  # done
+#     #'BS-61727004_4_cropped.jpg',  # done
+#     #'BS-61826902_1_cropped_part1.jpg',  # done
+#     #'BS-61826902_1_cropped_part2.jpg',  # done
+#     #'OW-001079-01_1.jpg',  # done
+#     #'OW-031931-01_4.jpg',  # done
+#     #'OW-032642-01_6.jpg',  # done
+#     #'OW-032653-01_7.jpg',  # done
+#     'OW-034179-01_1.jpg',
+# ]
+path_img = '/Users/manu/boulot/unit_solutions/data/datasets/bbox/yolo/images/val/'
 fname_list = [
-    #'BS-61727004_4_cropped.jpg',  # done
-    #'BS-61826902_1_cropped_part2.jpg',  # done
-    #'BS-61727004_4_cropped.jpg',  # done
-    #'BS-61826902_1_cropped_part1.jpg',  # done
-    #'BS-61826902_1_cropped_part2.jpg',  # done
-    #'OW-001079-01_1.jpg',  # done
-    #'OW-031931-01_4.jpg',  # done
-    #'OW-032642-01_6.jpg',  # done
-    #'OW-032653-01_7.jpg',  # done
-    'OW-034179-01_1.jpg',
+    #'OW-004338-01_6.jpeg',  # done
+    #'OW-005411-02_1.jpeg',
+    #'OW-032652-01_5.jpg',
+    #'OW-034179-01_1.jpg',
+    #'OW-035757-01_7.jpeg',
+    #'OW-035768-01_3.jpeg',
+    #'OW-035770-01_2.jpeg',  # one of detected instances is too small (segmentation error) and results in TextReader error
+    #'OW-035802-01_6.jpeg',
+    #'OW-035803-01_4.jpeg',
+    'OW-035836-01_5.jpeg',
+    'OW-035944-01_5.jpeg',
+    'OW-038659-01_4.jpg',
+    'SZ-67521506_1.jpg',
+    '121875-1_1.jpeg',
+    '124786-1_1.jpg',
+    '126461-1_1.jpg',
+    'BL-61526301_1.jpg',
+    'BL-61926307_3.jpg',
+    'OW-035688-01_1.jpg',
+    'OW-035691-01_7.jpg',
+    'OW-035700-01_5.jpg',
+    'OW-035720-01_4.jpg',
+    'OW-039020-01_1.jpg',
+    'TG-32-603_1.jpg',
+    'TG-53-301_1.jpg',
+    'TG-53-303_1.jpg',
 ]
 
-ireader = ImageReader(print=True)
+
+ireader = ImageReader(print_flag=True)
 
 for idx, fname in enumerate(fname_list):
     print(f'Processing image {idx+1}/{len(fname_list)}: {fname}')

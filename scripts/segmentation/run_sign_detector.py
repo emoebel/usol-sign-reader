@@ -7,13 +7,18 @@ import os
 import matplotlib.pyplot as plt
 
 # Cellpose test set:
-path_output = '/Users/manu/boulot/unit_solutions/predictions/sign_detection/cellpose_test_set/'
-path_images = '/Users/manu/boulot/unit_solutions/data/datasets/segmentation/cellpose/test/'
-fname_list = io.get_fname_list_from_dir_bis(path_images, ext_list=['jpg'], with_extension=True) # images are all jpg here. Masks are png
+# path_output = '/Users/manu/boulot/unit_solutions/predictions/sign_detection/cellpose_test_set/'
+# path_images = '/Users/manu/boulot/unit_solutions/data/datasets/segmentation/cellpose/test/'
+# fname_list = io.get_fname_list_from_dir_bis(path_images, ext_list=['jpg'], with_extension=True) # images are all jpg here. Masks are png
+
+# YOLO test set:
+path_output = '/Users/manu/boulot/unit_solutions/predictions/sign_detection/yolo_test_set/'
+path_images = '/Users/manu/boulot/unit_solutions/data/datasets/bbox/yolo/images/val/'
+fname_list = io.get_fname_list_from_dir_bis(path_images, ext_list=['jpg', 'jpeg', 'png'], with_extension=True)
 
 signdetector = SignDetector() # instanciate
 
-for idx, fname in enumerate(fname_list[1:]):
+for idx, fname in enumerate(fname_list): #fname_list[22:45] has already been computed on YOLO test set
     print(f'Processing image {idx+1}/{len(fname_list)}: {fname}')
     img_np = np.asarray(Image.open(path_images + fname))
 

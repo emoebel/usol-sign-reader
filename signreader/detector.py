@@ -8,12 +8,12 @@ import numpy as np
 from PIL import Image
 
 class ImageReader:
-    def __init__(self, print=False):
+    def __init__(self, print_flag=False):
         # Running params:
-        self.print = print
+        self.print = print_flag
 
         # Engines:
-        self.textreader = TextReader()
+        self.textreader = TextReader(print_flag=print_flag)
         self.signdetector = SignDetector()
         self.symbdetector = SymbolDetector()
 
@@ -44,17 +44,17 @@ class ImageReader:
         img_np = np.asarray(img_pil)
 
         # First, get instance masks
-        if self.print: print('[ImageRreader] Running sign detector...')
+        if self.print: print('[ImageReader] Running sign detector...')
         masks = self.signdetector(img_np)
         idx_instance_list = np.unique(masks)[1:] # this gives the instance idx of each sign
 
         # Next, detect objects:
-        if self.print: print('[ImageRreader] Running symbol detector...')
+        if self.print: print('[ImageReader] Running symbol detector...')
         boxes, class_names = self.symbdetector(img_np)
 
         icontent = [] # instanciate image content object
         for idx_instance in idx_instance_list: # for each sign
-            if self.print: print(f'[ImageRreader] Analyzing sign {idx_instance}...')
+            if self.print: print(f'[ImageReader] Analyzing sign {idx_instance}...')
             mask_sign = masks == idx_instance # get mask specific to current sign
 
             # Use the mask to get keep only boxes that are part of mask
@@ -68,13 +68,13 @@ class ImageReader:
             img_pil_focus = Image.fromarray(img_np_focus, 'RGB')
 
             # Read the text on sign:
-            if self.print: print('[ImageRreader] Running text reader...')
+            if self.print: print('[ImageReader] Running text reader...')
             scontent = self.textreader(img_pil_focus)
 
             # Now that we have detected everything that we need, we have to put these detections in relation
             # What symbol is part of which text line?
             # TODO: rest of this block could be self.put_detections_in_relation()
-            if self.print: print('[ImageRreader] Putting all sign information together...')
+            if self.print: print('[ImageReader] Putting all sign information together...')
             scontent = transform.get_scontent_without_none_coordinates(scontent) # see function description for explanation
             idx_closest_line_per_box = analysis.get_lines_for_boxes(boxes=box_list_in_mask, scontent=scontent)
 

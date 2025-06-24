@@ -86,3 +86,47 @@ def get_scontent_without_none_coordinates(scontent):
         scontent[idx] = lcontent
 
     return scontent
+
+
+def get_scale_factor_max_image_size(img_np, max_img_size):
+    img_shape = img_np.shape[:2]
+
+    idx_ax_small = int(np.argmin(img_shape))
+    idx_ax_large = int(np.argmax(img_shape))
+
+    l_small = img_shape[idx_ax_small]
+    l_large = img_shape[idx_ax_large]
+
+    scale_factor = max_img_size / l_large
+    return scale_factor
+
+
+def get_scale_factor_min_image_size(img_np, min_img_size):
+    img_shape = img_np.shape[:2]
+
+    idx_ax_small = int(np.argmin(img_shape))
+    idx_ax_large = int(np.argmax(img_shape))
+
+    l_small = img_shape[idx_ax_small]
+    l_large = img_shape[idx_ax_large]
+
+    scale_factor = min_img_size / l_small
+    return scale_factor
+
+
+def resize_img_with_scale_factor(img_np, scale_factor):
+    img_shape = img_np.shape[:2]
+
+    img_shape_new = [
+        int(np.round(img_shape[0] * scale_factor)),
+        int(np.round(img_shape[1] * scale_factor)),
+    ]
+
+    img_new = skimage.transform.resize(
+        image=img_np,
+        output_shape=img_shape_new,
+        preserve_range=True,
+    )
+    img_new = img_new.astype(np.uint8)
+
+    return img_new
