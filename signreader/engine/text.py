@@ -152,7 +152,7 @@ class TextReader:
 
             # Find destination position:
             if lcontent['destination'] is not None:
-                print('[TextReader] lcontent[destination]: ' + lcontent['destination'])
+                if self.print: print('[TextReader] lcontent[destination]: ' + lcontent['destination'])
                 objects = self.model.detect(img, lcontent['destination'])['objects']
                 if len(objects) > 1:
                     print(f"[TextReader] Line {idx_line}: found {len(objects)} destination instance(s)")
@@ -164,7 +164,7 @@ class TextReader:
 
             # Find duration position:
             if lcontent['duration'] is not None:
-                print('[TextReader] lcontent[duration]: ' + lcontent['duration'])
+                if self.print: print('[TextReader] lcontent[duration]: ' + lcontent['duration'])
                 objects = self.model.detect(img, lcontent['duration'])['objects']
                 if len(objects) > 1:
                     print(f"[TextReader] Line {idx_line}: found {len(objects)} duration instance(s)")

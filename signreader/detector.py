@@ -61,9 +61,6 @@ class ImageReader:
             box_list_in_mask = analysis.which_boxes_are_in_mask(boxes, mask_sign)
 
             # Multiply image by mask, and get and image focused on current sign. Everything else is blacked out
-            #img_np_focus = np.zeros(img_np.shape, dtype=np.uint8)
-            #for channel in range(3):
-            #    img_np_focus[:, :, channel] = img_np[:, :, channel] * mask_sign
             img_np_focus = transform.multiply_rgb_image_by_binary_mask(img_np, mask_sign)
             img_pil_focus = Image.fromarray(img_np_focus, 'RGB')
 
@@ -75,27 +72,52 @@ class ImageReader:
             # What symbol is part of which text line?
             # TODO: rest of this block could be self.put_detections_in_relation()
             if self.print: print('[ImageReader] Putting all sign information together...')
-            scontent = transform.get_scontent_without_none_coordinates(scontent) # see function description for explanation
-            idx_closest_line_per_box = analysis.get_lines_for_boxes(boxes=box_list_in_mask, scontent=scontent)
-
-            for idx_line, lcontent in enumerate(scontent):  # for each line in sign
-                idx_boxes = np.nonzero(np.array(idx_closest_line_per_box) == idx_line)[0]  # [0] because outputs a tupple
-
-                class_lbl_list = None  # default value
-                if len(idx_boxes) > 0:  # if for current line corresponding boxes have been found
-                    class_lbl_list = []
-                    for idx_box in idx_boxes:
-                        box = box_list_in_mask[idx_box]
-                        class_lbl_list.append(int(box.cls[0]))
-
-                lcontent['symbols'] = class_lbl_list
-                scontent[idx_line] = lcontent
+            scontent = self.put_symbols_and_text_in_relation(scontent, box_list_in_mask)
+            # scontent = transform.get_scontent_without_none_coordinates(scontent) # see function description for explanation
+            # idx_closest_line_per_box = analysis.get_lines_for_boxes(boxes=box_list_in_mask, scontent=scontent)
+            #
+            # for idx_line, lcontent in enumerate(scontent):  # for each line in sign
+            #     idx_boxes = np.nonzero(np.array(idx_closest_line_per_box) == idx_line)[0]  # [0] because outputs a tupple
+            #
+            #     class_lbl_list = None  # default value
+            #     if len(idx_boxes) > 0:  # if for current line corresponding boxes have been found
+            #         class_lbl_list = []
+            #         for idx_box in idx_boxes:
+            #             box = box_list_in_mask[idx_box]
+            #             class_lbl_list.append(int(box.cls[0]))
+            #
+            #     lcontent['symbols'] = class_lbl_list
+            #     scontent[idx_line] = lcontent
 
             icontent.append(scontent)
 
         self.set_data(img_np, masks, boxes, class_names, icontent)
 
         return icontent
+
+    def put_symbols_and_text_in_relation(self, scontent, box_list):
+        '''
+        This functions analyses detected text and detected symbols (boxes), and establishes their relation.
+        To which text line corresponds which box?
+        :param scontent: (list of dict)
+        :return: (list of dict)
+        '''
+        scontent = transform.get_scontent_without_none_coordinates(scontent)  # see function description for explanation
+        idx_closest_line_per_box = analysis.get_lines_for_boxes(boxes=box_list, scontent=scontent)
+
+        for idx_line, lcontent in enumerate(scontent):  # for each line in sign
+            idx_boxes = np.nonzero(np.array(idx_closest_line_per_box) == idx_line)[0]  # [0] because outputs a tupple
+
+            class_lbl_list = None  # default value
+            if len(idx_boxes) > 0:  # if for current line corresponding boxes have been found
+                class_lbl_list = []
+                for idx_box in idx_boxes:
+                    box = box_list[idx_box]
+                    class_lbl_list.append(int(box.cls[0]))
+
+            lcontent['symbols'] = class_lbl_list
+            scontent[idx_line] = lcontent
+        return scontent
 
     def initialize_data(self):
         self.img_np = None
