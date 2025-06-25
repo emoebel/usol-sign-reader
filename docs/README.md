@@ -5,7 +5,8 @@ It calls 3 different AI models that can be found in
 `signreader.engine.symbol.SymbolDetector`, 
 and `signreader.engine.text.TextReader`.
 
-Examples of how to use these classes can be found in `examples/` .
+Examples of how to use these classes can be found in `examples/`. 
+Please refer to the source code for more details about the inputs and outputs of each class.
 
 
 
