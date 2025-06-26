@@ -1,8 +1,10 @@
 from ultralytics import YOLO
 
 class SymbolDetector:
-    def __init__(self):
-        self.model = YOLO('/Users/manu/boulot/unit_solutions/training/yolo/unitsol_symbols_v0/run4/weights/last.pt')
+    def __init__(self, path_model=None):
+        if path_model is None:
+            path_model = '/Users/manu/boulot/unit_solutions/training/yolo/unitsol_symbols_v0/run4/weights/last.pt'
+        self.model = YOLO(path_model)
 
     def __call__(self, img):
         '''

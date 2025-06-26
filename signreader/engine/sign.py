@@ -3,9 +3,12 @@ import signreader.utils.transform as transform
 import skimage
 
 class SignDetector:
-    def __init__(self):
-        self.model = models.CellposeModel(pretrained_model='/Users/manu/boulot/unit_solutions/training/cellpose/v1/round4/model_cellpose_e30-40')
+    def __init__(self, path_model=None):
+        if path_model is None:
+            path_model = '/Users/manu/boulot/unit_solutions/training/cellpose/v1/round4/model_cellpose_e30-40'
+        self.model = models.CellposeModel(pretrained_model=path_model)
         self.min_img_size = 512  # used as size norm for training
+
     def __call__(self, img_np):
         '''
 

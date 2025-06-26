@@ -4,18 +4,24 @@ from signreader.engine.symbol import SymbolDetector
 import signreader.utils.analysis as analysis
 import signreader.utils.transform as transform
 
+import os
 import numpy as np
 from PIL import Image
 
 class ImageReader:
-    def __init__(self, print_flag=False):
+    def __init__(self, path_models=None, print_flag=False):
+        # Get model paths:
+        if path_models is None:
+            path_models = '/Users/manu/boulot/unit_solutions/training/models/'
+        fname_cellpose, fname_yolo = self.get_model_paths_from_folder(path_models)
+
         # Running params:
         self.print = print_flag
 
         # Engines:
         self.textreader = TextReader(print_flag=print_flag)
-        self.signdetector = SignDetector()
-        self.symbdetector = SymbolDetector()
+        self.signdetector = SignDetector(path_model=fname_cellpose)
+        self.symbdetector = SymbolDetector(path_model=fname_yolo)
 
         # Data:
         self.img_np = None
@@ -135,3 +141,17 @@ class ImageReader:
 
     def get_data(self):
         return self.img_np, self.masks, self.boxes, self.class_names, self.icontent
+
+    def get_model_paths_from_folder(self, path_models):
+        dir_fnames_yolo = os.listdir(os.path.join(path_models, 'yolo'))
+        if len(dir_fnames_yolo) > 1:
+            print('[ImageReader] Model loader error: yolo folder should contain only 1 file')
+
+        fname_yolo = os.path.join(path_models, 'yolo', dir_fnames_yolo[0])
+
+        dir_fnames_cellpose = os.listdir(os.path.join(path_models, 'cellpose'))
+        if len(dir_fnames_cellpose) > 1:
+            print('[ImageReader] Model loader error: cellpose folder should contain only 1 file')
+        fname_cellpose = os.path.join(path_models, 'cellpose', dir_fnames_cellpose[0])
+
+        return fname_cellpose, fname_yolo
