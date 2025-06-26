@@ -5,7 +5,7 @@ This repository contains an AI-based tool for extracting information from photos
 ## Installation
 
 ```
-$ pip install -r requirements.txt
+$ pip install git+https://github.com/emoebel/usol-sign-reader.git
 ```
 
 ## Usage
