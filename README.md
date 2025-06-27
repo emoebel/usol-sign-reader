@@ -30,4 +30,4 @@ models
 - examples: python scripts with usage examples
 - tests: unit tests (will not work for now because input data is not contained in this repo)
 - scripts: python scripts I used for constituting the datasets. May be a bit messy.
-- notebooks: jupyter notebooks I used for prototyping the pipeline
+- notebooks: jupyter notebooks I used for prototyping the pipeline. Also contains the Colab notebooks for training the AI models.
