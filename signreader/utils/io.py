@@ -108,3 +108,28 @@ def save_image_content_as_txt(icontent, fname):
         for scontent in icontent:
             pprint.pprint(scontent, stream=f, sort_dicts=True)
             print('\n', file=f)
+
+
+def save_image_content_as_csv(icontent, class_names, fname):
+    df = pd.DataFrame(columns=['sign_index', 'destination', 'duration', 'symbols'])
+    for sign_index, scontent in enumerate(icontent):
+        for lcontent in scontent:
+            duration_string = ''
+            if lcontent['duration']['hours'] is not None:
+                duration_string += str(lcontent['duration']['hours']) + 'h '
+            if lcontent['duration']['minutes'] is not None:
+                duration_string += str(lcontent['duration']['minutes']) + 'm'
+
+            symbols_string = ''
+            if lcontent['symbols'] is not None:
+                for class_idx in lcontent['symbols']:
+                    symbols_string += class_names[class_idx] + ', '
+
+            new_row = pd.DataFrame({
+                'sign_index': [sign_index],
+                'destination': [lcontent['destination']],
+                'duration': [duration_string],
+                'symbols': [symbols_string]
+            })
+            df = pd.concat([df, new_row], ignore_index=True)
+    df.to_csv(fname)
