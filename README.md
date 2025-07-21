@@ -12,13 +12,20 @@ Install code from github repository:
 ```
 $ pip install git+https://github.com/emoebel/usol-sign-reader.git
 ```
-Test if installation is successful:
-```
-$ cd /path/to/usol-sign-reader/tests
-$ python test_text_reader.py
-$ python test_sign_detector.py
-$ python test_symbol_detector.py
-```
+
+[//]: # (Test if installation is successful:)
+
+[//]: # (```)
+
+[//]: # ($ cd /path/to/usol-sign-reader/tests)
+
+[//]: # ($ python test_text_reader.py)
+
+[//]: # ($ python test_sign_detector.py)
+
+[//]: # ($ python test_symbol_detector.py)
+
+[//]: # (```)
 
 ## Usage
 
