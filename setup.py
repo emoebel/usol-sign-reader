@@ -19,7 +19,7 @@ setuptools.setup(
         "Operating System:: OS Independent",
     ],
     install_requires=[
-        "numpy==2.1.3",
+        "numpy==1.26.4",
         "scikit-image==0.25.2",
         "cellpose==4.0.4",
         "ultralytics==8.3.156",
